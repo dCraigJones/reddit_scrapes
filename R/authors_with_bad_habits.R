@@ -1,6 +1,10 @@
 library(tidyverse)
 library(jsonlite)
 library(tidytext)
+theme_set(theme_bw())
+
+
+# Load posts from Reddit --------------------------------------------------
 
 # Read JSON from Reddit API
 
@@ -29,6 +33,9 @@ for (i in 2:(n-1)) {
   data <- rbind(data, tmp)
 
 }
+
+
+# Text Analysis -----------------------------------------------------------
 
 # Remove Stop Words
 
@@ -127,50 +134,63 @@ data %>%
 write.csv(result, "result.csv")
 
 
+# Graphics ----------------------------------------------------------------
+
+result %>%
+  #count(game) %>%
+  #arrange(desc(n)) %>%
+  ggplot(aes(x=reorder(author, -score), y=score)) +
+  geom_col() +
+  labs(x="", y="score", title="Authors with Bad Habits") +
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))
+
+
+# Sandbox -----------------------------------------------------------------
 
 
 
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "york")) %>% filter(stop_words==TRUE)
-
-
-# bigram test
-
-data %>%
-  unnest_tokens(bigram, body, token="ngrams", n=3, n_min=2) -> tmp
-
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "orson")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "adams")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "crichton")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "atwood")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "sergei")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "goodkind")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "deary")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "simmons")) %>% filter(stop_words==TRUE)
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "hamilton")) %>% filter(stop_words==TRUE)
-# also, anita and blake
-
-tmp %>%
-  mutate(stop_words=str_detect(bigram, "ayn rand")) %>% filter(stop_words==TRUE)
-
+# 
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "york")) %>% filter(stop_words==TRUE)
+# 
+# 
+# # bigram test
+# 
+# data %>%
+#   unnest_tokens(bigram, body, token="ngrams", n=3, n_min=2) -> tmp
+# 
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "orson")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "adams")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "crichton")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "atwood")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "sergei")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "goodkind")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "deary")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "simmons")) %>% filter(stop_words==TRUE)
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "hamilton")) %>% filter(stop_words==TRUE)
+# # also, anita and blake
+# 
+# tmp %>%
+#   mutate(stop_words=str_detect(bigram, "ayn rand")) %>% filter(stop_words==TRUE)
+# 
 
 
