@@ -3,6 +3,8 @@ library(jsonlite)
 library(tidytext)
 library(readxl)
 
+theme_set(theme_bw())
+
 # Read JSON from Reddit API
 
 # Constants ---------------------------------------------------------------
@@ -126,3 +128,19 @@ tmp %>%
   filter(!is.na(n)) %>%
   select(-n) %>% 
   arrange(username, game)-> export
+
+save(export, file="data/pick_three_games.RData")
+write.csv(export, file="data/pick_three_games.csv")
+
+
+# Graphics ----------------------------------------------------------------
+
+load("data/pick_three_games.RData")
+
+export %>%
+  count(game) %>%
+  arrange(desc(n)) %>%
+  ggplot(aes(x=reorder(game, -n), y=n)) +
+  geom_col() +
+  labs(x="", y="count", title="Pick Three Games") +
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=1))
